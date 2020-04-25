@@ -106,27 +106,24 @@ void IMU::DISPLAY_BUFFER(uint8_t *crc_header)
     int offset = 0;
     if(buf[0] == 0x72)
     { 
-      float R1,R2;
+      float Pitch_1,Pitch_2;
       int n = 2;
 
-      R1 = ((float)(int16_t)(buf[offset+3] + (buf[offset+4]<<8)))/100;
-      offset = offset +6;
-      R2 = ((float)(int16_t)(buf[offset+3] + (buf[offset+4]<<8)))/100;
+      Pitch_1 = ((float)(int16_t)(buf[offset+3] + (buf[offset+4]<<8)))/100;
+      offset  = offset +6;
+      Pitch_2 = ((float)(int16_t)(buf[offset+3] + (buf[offset+4]<<8)))/100;
     
-      float value = Angle(R1,R2);
-      int Display = value*10;
-      int* d = digits(Display);
-      A.SET(30,32,34,36,d[3]);
+      float knee_angle = Angle(Pitch_1,Pitch_2); 
+      int   Display    = knee_angle*10;
+      int*  d          = digits(Display);
+      A.SET(30,32,34,36,d[3]);        //Writing bits in d[3] to pins
       B.SET(22,24,26,28,d[2]);
       C.SET(31,33,35,37,d[1]);
-      D.SET(23,25,27,29,d[0]);
+      D.SET(23,25,27,29,d[0]);        //Writing bits in d[0] to pins
       
       
       uint32_t Theta;  
-      memcpy(&Theta, &value, sizeof(value));
-
-      
-      
+      memcpy(&Theta, &knee_angle, sizeof(knee_angle));
    
       byte myVar_0_Byte =  Theta>>24; // get the high byte
       byte myVar_1_Byte =  Theta>>16; // get the low byte

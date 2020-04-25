@@ -4,22 +4,19 @@
 #define BAUD_RATE      (115200)
 #define MAX_PACKET_LEN (256)
 
-
-
 class IMU
 {
   public:
-    void INIT();
-    void READ();
+    void INIT();            // Initiates IMU Sensors
+    void READ();            // Read Data from IMU Sensors
     void DISPLAY_BUFFER(uint8_t *crc_header);
-    int ready_to_read = 0;
+    int ready_to_read = 0;  //Flag when Buffer is ready
     
+  private: 
     uint32_t ofs;
     uint8_t  buf[MAX_PACKET_LEN + 7] = {0};
     uint16_t payload_len; 
     uint16_t len;
-
-  private: 
 
     /* state machine state */
     enum status
